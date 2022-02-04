@@ -8,7 +8,8 @@ const modal = (state = initialState, { type, payload }) => {
          return {
             show: true,
             action: payload.action,
-            title: payload.title
+            title: payload.title,
+            id: payload.id
          }
       case HIDE_MODAL:
          return {

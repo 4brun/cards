@@ -1,13 +1,18 @@
-import { CHANGE_CARD, CHANGE_WIDTH, DELETE_CARD, REBASE_CARDS } from "../store/types/cardTypes";
+import { CHANGE_CARD, CHANGE_WIDTH, DELETE_CARD, ADD_CHILD_CARD, UP_CARD, DOWN_CARD } from "../store/types/cardTypes";
 
-export const changeCard = (tittle) => ({
+export const changeCard = (id, title) => ({
    type: CHANGE_CARD,
-   payload: tittle
+   payload: { id, title }
 })
 
-export const changeWidth = (width) => ({
+export const changeWidth = (id, width) => ({
    type: CHANGE_WIDTH,
-   payload: width
+   payload: { id, width }
+})
+
+export const addCard = (id, title) => ({
+   type: ADD_CHILD_CARD,
+   payload: { id, title }
 })
 
 export const deleteCard = (id) => ({
@@ -15,7 +20,12 @@ export const deleteCard = (id) => ({
    payload: id
 })
 
-export const rebaseCards = (title, width) => ({
-   type: REBASE_CARDS,
-   payload: { title, width }
+export const upCard = (id) => ({
+   type: UP_CARD,
+   payload: id
+})
+
+export const downCard = (id) => ({
+   type: DOWN_CARD,
+   payload: id
 })

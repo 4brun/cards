@@ -1,14 +1,10 @@
 import { Dropdown } from "react-bootstrap"
-import { useDispatch, useSelector } from "react-redux"
-import { deleteCard, rebaseCards } from "../../actions/cardsActions"
-import { createChildrenCard, deleteChildrenCard } from "../../actions/childActions"
-import { hideModal, showModal } from "../../actions/modalActions"
+import { useDispatch } from "react-redux"
+import { deleteCard, downCard, upCard } from "../../actions/cardsActions"
+import { showModal } from "../../actions/modalActions"
 
-
-const ActionsMenu = ({ isChild }) => {
+const ActionsMenu = ({ id }) => {
    const dispatch = useDispatch()
-   const rootCard = useSelector((state) => state.cards)
-   const childCard = useSelector((state) => state.child)
 
    const cardActions = [{
       id: 0,
@@ -23,29 +19,12 @@ const ActionsMenu = ({ isChild }) => {
    {
       id: 2,
       title: "Добавить дочернюю карточку",
-      action: 'addChildCard'
+      action: 'addCard'
    }] // т.к. тут везде требуется поле ввода, можно переиспользовать модальное окно
 
-   const handlerClick = (action, title) => dispatch(showModal(action, title))
+   const handlerClick = (action, title) => dispatch(showModal(action, title, id))
 
-   const deleteItem = (isChild) => {
-      console.log(isChild);
-      if (!isChild) {
-         dispatch(deleteCard()) // удаляем родителя
-      } else {
-         dispatch(deleteChildrenCard()) // удаляем дочку
-      }
-   }
-
-   const rebase = () => {
-      let tmp = childCard // временно кладу данные в переменную
-      if (!tmp.length) {
-         dispatch(hideModal())
-      } else {
-         dispatch(createChildrenCard(rootCard[0].title, rootCard[0].width)) // записываю в дочернюю карточку данные из главной
-         dispatch(rebaseCards(tmp[0].title, tmp[0].width)) // в главную карточку записываю данные из дочерней
-      }
-   }
+   const deleteItem = (id) => dispatch(deleteCard(id))
 
    return (
       <Dropdown>
@@ -56,15 +35,14 @@ const ActionsMenu = ({ isChild }) => {
          <Dropdown.Menu>
             {cardActions.map((el) =>
                <Dropdown.Item
-                  onClick={() => handlerClick(el.action, el.title, isChild)}
+                  onClick={() => handlerClick(el.action, el.title)}
                   key={el.id}>
                   {el.title}
                </Dropdown.Item>)}
 
-            <Dropdown.Item onClick={() => deleteItem(isChild)}>Удалить карточу</Dropdown.Item>
-            {!isChild && <Dropdown.Item onClick={() => rebase()}>Опустить карточку</Dropdown.Item>}
-            {/* видно только если можно опустить */}
-            {isChild && <Dropdown.Item onClick={() => rebase()}>Поднять карточку</Dropdown.Item>}
+            <Dropdown.Item onClick={() => deleteItem(id)}>Удалить карточу</Dropdown.Item>
+            <Dropdown.Item onClick={() => dispatch(downCard(id))}>Опустить карточку</Dropdown.Item>
+            {id !== 1 && <Dropdown.Item onClick={() => dispatch(upCard(id))}>Поднять карточку</Dropdown.Item>}
          </Dropdown.Menu>
       </Dropdown>
    )

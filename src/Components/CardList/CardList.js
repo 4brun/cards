@@ -1,13 +1,12 @@
 import { useSelector } from "react-redux"
-import RootCard from "../Card/RootCard"
-
+import CardContent from "../CardContent/CardContent"
 
 const CardList = () => {
    const cards = useSelector((state) => state.cards)
 
    return (
       <>
-         {cards.length && cards.map((el) => <RootCard card={el} key={el.id} />)}
+         <CardContent card={cards[0]} />
       </>
    )
 }
